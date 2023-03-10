@@ -305,7 +305,10 @@ for i in range(1, 11, 1):
 
 for i in range(11, 20, 1):
   for j in range(0, len(z), 1):
-    gmsh.model.mesh.setTransfiniteCurve(abs(i + j*100), 11, meshType="Progression", coef=0.80)
+    if i != 15:
+      gmsh.model.mesh.setTransfiniteCurve(abs(i + j*100), 11, meshType="Progression", coef=0.80)
+    else:
+      gmsh.model.mesh.setTransfiniteCurve(abs(i + j*100), 40, meshType="Bump", coef=0.20)
 
 for i in range(0, len(inletblock), 1):
   if i%3 == 0:
@@ -322,7 +325,12 @@ for i in range(0, len(outletblock), 1):
     gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, outletblock[i][0][1])], oriented=True)[2][1], 11, meshType="Progression", coef=0.80)    
 
 for i in range(0, len(electrodeblock), 1):
-  if i%3 == 0:
+  if i > (3*(len(z) - 1) - 1) and i < (4*(len(z) - 1) - 1) and i%3 == 0:
+    gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[1][1], 40, meshType="Bump", coef=0.20)
+    gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[3][1], 40, meshType="Bump", coef=-0.20)
+  elif i > (3*(len(z) - 1) - 1) and i < (4*(len(z) - 1)) and i%3 != 0:
+    gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[2][1], 40, meshType="Bump", coef=0.20)
+  elif i%3 == 0:
     gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[1][1], 11, meshType="Progression", coef=0.80)
     gmsh.model.mesh.setTransfiniteCurve(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[3][1], 11, meshType="Progression", coef=-0.80)
   else:
@@ -453,7 +461,7 @@ for i in range(0, len(electrodeblock), 1):
   elif i >= (len(z) - 1):
     gmsh.model.mesh.setTransfiniteCurve(abs(gmsh.model.getBoundary(dimTags=[(2, electrodeblock[i][0][1])], oriented=True)[0][1]), 11, meshType="Progression", coef=-0.80)
 
-#print(electrodeblock)
+print(electrodeblock)
 
 #TRANSFINITE SURFACES, VOLUMES AND RECOMBINATION
 
@@ -480,10 +488,10 @@ for i in range(1, 10, 1):
 
 for i in range(0, len(inletblock), 1):
   for j in range(0, 6, 1):
-    if inletblock[i][j][0] == 2:
+    if inletblock[i][j][0] == 2: #tag of the surface
       gmsh.model.mesh.setTransfiniteSurface(inletblock[i][j][1])
       gmsh.model.mesh.setRecombine(2, inletblock[i][j][1])
-    elif inletblock[i][j][0] == 3:
+    elif inletblock[i][j][0] == 3: #tag of the volume
       gmsh.model.mesh.setTransfiniteVolume(inletblock[i][j][1])
 
 for i in range(0, len(downinletblock), 1):
