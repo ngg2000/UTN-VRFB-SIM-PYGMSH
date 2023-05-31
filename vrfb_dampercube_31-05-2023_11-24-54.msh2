@@ -1,0 +1,17 @@
+$MeshFormat
+2.2 0 8
+$EndMeshFormat
+$PhysicalNames
+5
+2 1 "frontandBack"
+2 2 "inlet"
+2 3 "outlet"
+2 4 "walls"
+3 5 "fluid"
+$EndPhysicalNames
+$Nodes
+0
+$EndNodes
+$Elements
+0
+$EndElements
